@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const { toast } = useToast();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -26,6 +27,7 @@ const Index = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
   };
 
   return (
@@ -48,10 +50,36 @@ const Index = () => {
                 </button>
               ))}
             </div>
-            <Button onClick={() => scrollToSection('контакты')} className="bg-secondary hover:bg-secondary/90">
+            <Button onClick={() => scrollToSection('контакты')} className="hidden md:flex bg-secondary hover:bg-secondary/90">
               Заказать звонок
             </Button>
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+              aria-label="Меню"
+            >
+              <Icon name={isMenuOpen ? "X" : "Menu"} size={28} />
+            </button>
           </div>
+          {isMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 space-y-3 border-t pt-4">
+              {['Главная', 'О мне', 'Услуги', 'Цены', 'Портфолио', 'Контакты'].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
+                  className="block w-full text-left py-2 px-4 text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-all font-medium"
+                >
+                  {item}
+                </button>
+              ))}
+              <Button 
+                onClick={() => scrollToSection('контакты')} 
+                className="w-full bg-secondary hover:bg-secondary/90 mt-2"
+              >
+                Заказать звонок
+              </Button>
+            </div>
+          )}
         </nav>
       </header>
 
